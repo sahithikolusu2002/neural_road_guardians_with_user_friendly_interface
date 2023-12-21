@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potholes Detection Dashboard</title>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffccff;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100vw;
+            height: 99vh;
+        }
+
+        /* Left Side (Info) */
+        .info-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* Center horizontally */
+            padding: 20px;
+            height: 95%;
+            background: linear-gradient(#33ccff, #ffccff);
+            color: #800000;
+            font-family: "Gill Sans", sans-serif;
+            padding-right: 20px;
+        }
+
+        /* Title Styling */
+        .title {
+            background: linear-gradient(to bottom, #350068, #FF6978);
+            /* Red to Yellow Gradient */
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            margin-left: 10px;
+            color: lightgoldenrodyellow;
+        }
+
+        .title1 {
+            background: linear-gradient(to bottom, #350068, #FF6978);
+            /* Red to Yellow Gradient */
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: lightgoldenrodyellow;
+            text-align: center;
+            margin-left: 10px;
+            border-color: maroon;
+        }
+
+        /* Right Side (Plots) */
+        .plot-container {
+            display: grid;
+            flex-direction: column;
+            flex: 4;
+            height: 100%;
+        }
+
+        .plot-row {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .plot-box {
+            width: 49.5%;
+            height: 380px;
+            border: 1px solid hsl(0, 65%, 45%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px #0000001a;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .plot {
+            flex-grow: 1;
+            width: 100%;
+            height: 90%;
+        }
+
+        .plot-label {
+            text-align: center;
+            background-color: #f2f2f2;
+            font-weight: bold;
+            font-size: 1px;
+        }
+
+        .single-plot {
+            height: 99%;
+            width: 99%;
+        }
+
+        #pothole_id {
+            text-align: center;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+        p{
+            height: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- Left Side (Info) -->
+        <div class="info-container">
+            <img src="https://www.sih.gov.in/img1/SIH2023-logo.png"
+                style="width: 300px;padding-bottom: 20px;height: 60px;">
+            <!-- Title with Gradient Background -->
+            <h2 class="title">Pothole Pathfinder</h2>
+            <!-- Rest of the Content -->
+            <p><b>Total Number of Potholes: {{ total_potholes }}</b></p>
+            <p><b>Number of Low Potholes:{{ low_potholes }}</b></p>
+            <p><b>Number of Moderate Potholes:{{ moderate_potholes }}</b></p>
+            <p><b>Number of High Potholes:{{ high_potholes }}</b></p>
+            <p class="center-text"><b>Value of Highest Depth Pothole: {{ highest_depth }} mm</b></p>
+            <!-- Additional Information -->
+            <p id="pothole_id" style="font-weight: bold;">Date : {{date}}</p>
+            <h3 class="title1">
+                <!-- Severity Display -->
+                {% if moderate_potholes > low_potholes and moderate_potholes > high_potholes and total_potholes > 10 %}
+                Moderate Risk
+                {% elif low_potholes > moderate_potholes and low_potholes > high_potholes and total_potholes < 10 %}
+                Low Risk
+                {% else %}
+                High Risk
+                {% endif %}
+            </h3>
+            <button class="title" onclick="downloadPDF()">Download PDF</button>
+            <!-- Google Maps -->
+            <div id="map" style="height: 300px; width: 100%; margin-top: 20px;"
+                data-lat="{{ latitude }}" data-lng="{{ longitude }}"></div>
+                <p id="pothole_id" style="font-weight: bold;">Latitude: {{ latitude}},Longitude: {{longitude}} </p>
+        </div>
+        
+
+        <!-- Right Side (Plots) -->
+        <div class="plot-container">
+            <!-- Upper Row -->
+            <div class="plot-row">
+                <div class="plot-box">
+                    <div class="plot">{{ fig_length_of_road | safe }}</div>
+                    <div class="plot-label">Length of the Road</div>
+                </div>
+                <div class="plot-box special-background">
+                    <div class="plot">{{ fig_severity | safe }}</div>
+                    <div class="plot-label">Severity</div>
+                </div>
+            </div>
+            <!-- Lower Row (Single Plot) -->
+            <div class="plot-row">
+                <div class="plot-box single-plot">
+                    <div class="plot">{{ fig_additional_1 | safe }}</div>
+                    <div class="plot-label">Additional Plot 1</div>
+                </div>
+            </div>
+            <!-- Add more rows and plot boxes as needed -->
+        </div>
+
+    </div>
+
+    <!-- Google Maps API script -->
+    <script>
+        function initMap() {
+            var latitude = parseFloat(document.getElementById('map').getAttribute('data-lat'));
+            var longitude = parseFloat(document.getElementById('map').getAttribute('data-lng'));
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 15
+            });
+
+            var marker = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+                title: 'Pothole Location'
+            });
+        }
+    </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+        async defer>
+    </script>
+
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script>
+    async function downloadPDF() {
+        var element = document.querySelector('.main-container');
+
+        var pdf = await html2pdf(element, {
+            margin: 0,  // Set margin to 0 for the entire screen size
+            filename: 'dashboard.pdf',
+            jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' },
+        });
+        pdf.outputPdf();
+    }
+</script>
+
+</body>
+
+</html>

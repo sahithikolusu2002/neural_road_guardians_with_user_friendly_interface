@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User and Transport Authority Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Align content vertically in the center */
+            height: 100vh;
+            background: linear-gradient(to right, #1E5799, #2989D8, #7DB9E8);
+        }
+
+        .title {
+            text-align: center;
+            color: #FFF;
+            font-size: 24px;
+            margin: 20px 0; /* Adjust margin as needed */
+        }
+
+        .container {
+            background-color: #FFF;
+            padding: 20px 30px; /* Adjust the padding as needed (top, right, bottom, left) */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 600px; /* Adjust the width as needed */
+            margin: 20px auto; /* Center the container and add margin for spacing */
+        }
+
+        .left-section,
+        .right-section {
+            flex: 1;
+            padding: 0 20px;
+        }
+
+        .left-section img,
+        .right-section img {
+            border-radius: 50%;
+            width: 100px; /* Adjust the size as needed */
+            height: 100px; /* Adjust the size as needed */
+            object-fit: cover;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: green;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .otp-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .otp-container label {
+            margin-bottom: 8px;
+        }
+
+        .otp-container input {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Title at the top of the page -->
+    <div class="title">
+        <h1>Neural Road Guardians</h1>
+    </div>
+    <div class="container left-section">
+        <div class="login-header">
+            <h3>User Login</h3>
+            <p>Please enter your phone number to receive OTP.</p>
+        </div>
+        <form class="login-form" action="otp.html" method="post">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Phone Number" required pattern="[0-9]{10}">
+
+            <button type="submit">Generate OTP</button>
+        </form>
+    </div>
+    <!-- New OTP container -->
+    <div class="container right-section otp-container">
+        <div class="login-header">
+            <h3>Enter OTP</h3>
+            <p>Please enter the OTP sent to your phone number.</p>
+        </div>
+        <form class="otp-form" action="success.html" method="post">
+            <label for="otp">OTP</label>
+            <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+
+    <div class="container right-section">
+        <div class="login-header">
+            <h3>Transport Authority Login</h3>
+            <p>Please enter your credentials to login.</p>
+        </div>
+        <form class="login-form" action="pdfs.html" method="post">
+            <label for="transport-username">Username</label>
+            <input type="text" id="transport-username" name="transport-username" placeholder="Username" required>
+
+            <label for="transport-password">Password</label>
+            <input type="password" id="transport-password" name="transport-password" placeholder="Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <script>
+        // JavaScript to toggle between user login and OTP container
+        document.addEventListener('DOMContentLoaded', function () {
+            const userLoginForm = document.querySelector('.left-section .login-form');
+            const otpContainer = document.querySelector('.right-section.otp-container');
+
+            userLoginForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                // Display the OTP container and hide the user login form
+                userLoginForm.style.display = 'none';
+                otpContainer.style.display = 'flex';
+            });
+        });
+    </script>
+</body>
+</html>

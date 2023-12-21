@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Maps Example</title>
+    <style>
+        /* Set the map to fill the entire page */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Display Google Map -->
+    <div id="map"></div>
+
+    <script>
+        // Function to initialize Google Map
+        function initMap() {
+            // Map center coordinates
+            var center1 = { lat: 17.456856, lng: 78.666711 }; // Example: Hyderabad
+            var center2 = { lat: 17.4700, lng: 78.5585 }; // Example: Another location
+            var center3 = { lat : 17.5078, lng :  78.8802 }; // Example: Yet another location
+
+            // Create a map object and set the center and zoom level
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: center1,
+                zoom: 12
+            });
+
+            // Example nearby locations - replace with your own coordinates
+            var nearbyLocations1 = [
+                { lat: 17.461334, lng: 78.670631, title: 'Nearby 1' },
+                { lat: 17.454895, lng: 78.668916, title: 'Nearby 2' },
+                { lat: 17.455480, lng: 78.662359, title: 'Nearby 3' },
+                { lat: 17.452236, lng: 78.673339, title: 'Nearby 4' },
+                { lat: 17.451967, lng: 78.657109, title: 'Nearby 5' },
+                { lat: 17.452967, lng: 78.657109, title: 'Nearby 6' },
+                { lat: 17.453967, lng: 78.657109, title: 'Nearby 7' },
+            ];
+
+            // Example nearby locations for center2 - replace with your own coordinates
+            var nearbyLocations2 = [
+                { lat: 17.4800, lng: 78.5585, title: 'Nearby 6' },
+                { lat: 17.4850, lng: 78.5600, title: 'Nearby 7' },
+                { lat: 17.4700, lng: 78.5550, title: 'Nearby 8' },
+                { lat: 17.4750, lng: 78.5650, title: 'Nearby 9' },
+                // Add more nearby locations as needed
+            ];
+
+            // Example nearby locations for center3 - replace with your own coordinates
+            var nearbyLocations3 = [
+                { lat: 17.4850, lng: 78.6200, title: 'Nearby 11' },
+                { lat: 17.4900, lng: 78.6250, title: 'Nearby 12' },
+                { lat: 17.4750, lng: 78.6150, title: 'Nearby 13' },
+                // Add more nearby locations as needed
+            ];
+
+            // Loop through nearby locations and create markers and circles for center1
+            nearbyLocations1.forEach(function (location) {
+                var nearbyMarker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: map,
+                    title: location.title,
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' // Red marker icon
+                });
+
+                // Create a circle around the marker
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 1000, // in meters (adjust as needed)
+                    fillColor: '#FF0000', // red color
+                    fillOpacity: 0.3, // transparency
+                    strokeWeight: 0 // no border
+                });
+
+                // Bind the circle to the marker's position
+                circle.bindTo('center', nearbyMarker, 'position');
+            });
+
+            // Loop through nearby locations and create markers and circles for center2
+            nearbyLocations2.forEach(function (location) {
+                var nearbyMarker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: map,
+                    title: location.title,
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
+                });
+
+                // Create a circle around the marker
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 1000, // in meters (adjust as needed)
+                    fillColor: '#FFFF00', // yellow color
+                    fillOpacity: 0.3, // transparency
+                    strokeWeight: 0 // no border
+                });
+
+                // Bind the circle to the marker's position
+                circle.bindTo('center', nearbyMarker, 'position');
+            });
+
+            // Loop through nearby locations and create markers and circles for center3
+            nearbyLocations3.forEach(function (location) {
+                var nearbyMarker = new google.maps.Marker({
+                    position: { lat: location.lat, lng: location.lng },
+                    map: map,
+                    title: location.title,
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png' // Orange marker icon
+                });
+
+                // Create a circle around the marker
+                var circle = new google.maps.Circle({
+                    map: map,
+                    radius: 1000, // in meters (adjust as needed)
+                    fillColor: '#FFA500', // orange color
+                    fillOpacity: 0.3, // transparency
+                    strokeWeight: 0 // no border
+                });
+
+                // Bind the circle to the marker's position
+                circle.bindTo('center', nearbyMarker, 'position');
+            });
+        }
+    </script>
+
+    <!-- Include the Google Maps API script with your API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+
+</body>
+
+</html>
